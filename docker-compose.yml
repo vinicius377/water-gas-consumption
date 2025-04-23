@@ -11,6 +11,7 @@ services:
       - .:/app
     networks: 
       - water-gas-consumption
+    env_file: ".env"
   db:
     container_name: water-gas-consumption-db
     ports:
@@ -19,6 +20,8 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: example
+    networks: 
+     - water-gas-consumption
 
 volumes:
  water-gas-consumption:

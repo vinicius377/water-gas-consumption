@@ -12,12 +12,12 @@ class Logger {
 
   info(message: string, paths = [] as string[]) {
     const tracePath = this.createTracePath(paths)
-    return this.pinoLogger.info(`${tracePath} ${message}`)
+    return this.pinoLogger.info(`${tracePath}${message}`)
   }
 
   error(message: string | Error, paths = [] as string[]) {
     const tracePath = this.createTracePath(paths)
-    return this.pinoLogger.error(`${tracePath} ${message}`)
+    return this.pinoLogger.error(`${tracePath}${message}`)
   }
 
   private createTracePath(paths: string[]) {
