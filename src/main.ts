@@ -18,10 +18,10 @@ async function boostrap() {
 
   server.listen({ port: 3000, host: "0.0.0.0" }, (err, address) => {
     if (err) {
-      logger.error(err)
+      logger.error(err, [boostrap.name])
       process.exit(1)
     }
-    logger.info(`Server listening at ${address}`)
+    logger.info(`Server listening at ${address}`, [boostrap.name])
   })
 }
 
