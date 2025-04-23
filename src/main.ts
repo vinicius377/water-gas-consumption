@@ -1,19 +1,28 @@
 import Fastify from "fastify"
+import { logger } from "./utils/logger"
+import { FastifyHttpOptions } from "fastify";
+import cors from "@fastify/cors"
 
-const server = Fastify({
-  logger: true
-})
+const fastifyConfig: FastifyHttpOptions<any> = {
+  logger: false
+}
 
-server.get("/", () => {
-  return "helloworld"
-})
+async function boostrap() {
+  const server = Fastify(fastifyConfig)
+  server.register(cors)
 
-server.listen({ port: 3000 }, (err, address) => {
-  if (err) {
-    console.error(err)
-    process.exit(1)
-  }
-  console.log(`Server listening at ${address}`)
-})
+  server.get("/", () => {
+    logger.info("teste")
+    return "helloworld"
+  })
 
+  server.listen({ port: 3000, host: "0.0.0.0" }, (err, address) => {
+    if (err) {
+      logger.error(err)
+      process.exit(1)
+    }
+    logger.info(`Server listening at ${address}`)
+  })
+}
 
+boostrap()

@@ -1,0 +1,28 @@
+services:
+  api:
+    image: water-gas-consumption
+    container_name: water-gas-consumption
+    build:
+      context: .
+      dockerfile: docker/development/Dockerfile
+    ports:
+     - "80:3000"
+    volumes:
+      - .:/app
+    networks: 
+      - water-gas-consumption
+  db:
+    container_name: water-gas-consumption-db
+    ports:
+     - "27017:27017"
+    image: mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+
+volumes:
+ water-gas-consumption:
+
+networks:
+ water-gas-consumption:
+
