@@ -6,6 +6,7 @@ export async function connectDB() {
   if (!MONGO_DB) {
     throw new Error("Missing MONGO_DB enviroment")
   }
+
   try {
     mongoose.connect(MONGO_DB)
     logger.info("Sucess DB connection")

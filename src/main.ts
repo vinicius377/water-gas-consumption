@@ -1,18 +1,15 @@
-import Fastify from "fastify"
+import "reflect-metadata"
 import { logger } from "./utils/logger"
-import { FastifyHttpOptions } from "fastify";
-import cors from "@fastify/cors"
 import { connectDB } from "./config/db";
-
-const fastifyConfig: FastifyHttpOptions<any> = {
-  logger: false
-}
+import { loadRoutes } from "./api/controllers";
+import { FastifyApp } from "./app";
 
 async function bootstrap() {
-  await connectDB() 
+  await connectDB()
 
-  const server = Fastify(fastifyConfig)
-  server.register(cors)
+  const server = new FastifyApp().setupFastifyServer()
+
+  loadRoutes(server)
 
   server.listen({ port: 3000, host: "0.0.0.0" }, (err, address) => {
     if (err) {
@@ -24,3 +21,4 @@ async function bootstrap() {
 }
 
 bootstrap()
+
