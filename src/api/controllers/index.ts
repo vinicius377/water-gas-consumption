@@ -1,6 +1,6 @@
-import { FastifyInstance } from "fastify"
 import { ConsumptionController } from "./consumption.controller"
+import { FastifyAppType } from "../../app"
 
-export function loadRoutes(app: FastifyInstance<any>) {
+export function loadRoutes(app: FastifyAppType) {
   ConsumptionController(app)
 }

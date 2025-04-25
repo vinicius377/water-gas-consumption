@@ -1,10 +1,10 @@
-import { FastifyInstance } from "fastify";
 import Container from "typedi";
 import { ConsumptionApp } from "../../business/apps/consumption.app";
-import { UploadDto, uploadSchema } from "../schemas/upload.schema";
+import { uploadSchema } from "../schemas/upload.schema";
 import { mapToUploadViewModel } from "../mappers/upload.mapper";
+import { FastifyAppType } from "../../app";
 
-export function ConsumptionController(server: FastifyInstance<any>) {
+export function ConsumptionController(server: FastifyAppType) {
   const app = Container.get(ConsumptionApp)
 
   server.post(
@@ -15,7 +15,7 @@ export function ConsumptionController(server: FastifyInstance<any>) {
       },
     },
     async (req, res) => {
-      const body = req.body as UploadDto
+      const body = req.body
 
       const result = await app.upload(body)
       res.code(200).send(mapToUploadViewModel(result))

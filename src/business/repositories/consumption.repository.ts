@@ -11,8 +11,8 @@ interface CreateConsumptionDto {
 }
 
 @Service()
-export class ConsumptionRepository{
-  constructor(@Inject(ConsumptionModel.name) private model: Model<ConsumptionEntity>) {}
+export class ConsumptionRepository {
+  constructor(@Inject(ConsumptionModel.name) private model: Model<ConsumptionEntity>) { }
 
   async create(dto: CreateConsumptionDto) {
     this.model.cleanIndexes
@@ -25,4 +25,21 @@ export class ConsumptionRepository{
     }).then(x => x.toObject())
   }
 
+  async findOnCurrentMonthByCustomerCode(customer_code: string) {
+    const dateStart = new Date()
+    dateStart.setDate(1)
+    dateStart.setHours(0, 0)
+
+    const dateEnd = new Date()
+    dateEnd.setMonth(dateStart.getMonth() + 1, 0)
+    dateStart.setHours(23, 0)
+
+    return this.model.findOne({
+        customer_code,
+         measure_datetime: {
+          $gte: dateStart.toISOString(),
+          $lte: dateEnd.toISOString()
+        } 
+      })
+  }
 }

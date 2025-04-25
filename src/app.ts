@@ -1,4 +1,4 @@
-import Fastify, { FastifyError, FastifyHttpOptions } from "fastify"
+import Fastify, { FastifyBaseLogger, FastifyError, FastifyInstance, RawReplyDefaultExpression, RawRequestDefaultExpression, RawServerDefault } from "fastify"
 import { validatorCompiler, serializerCompiler, ZodTypeProvider } from "fastify-type-provider-zod"
 import cors from "@fastify/cors"
 import { Error } from "./types/Error"
@@ -9,11 +9,13 @@ import { logger } from "./utils/logger"
 import helmet_pl from "@fastify/helmet"
 import mongo_sanitize_pl from "@exortek/fastify-mongo-sanitize"
 
+export type FastifyAppType = FastifyInstance<RawServerDefault, RawRequestDefaultExpression, RawReplyDefaultExpression, FastifyBaseLogger, ZodTypeProvider>
+
 export class FastifyApp {
   private app = Fastify({
     ignoreDuplicateSlashes: true,
     ignoreTrailingSlash: true
-  }).withTypeProvider<ZodTypeProvider>()
+  }).withTypeProvider<ZodTypeProvider>() as FastifyAppType
 
   public setupFastifyServer() {
     this.app.setValidatorCompiler(validatorCompiler)
@@ -39,22 +41,25 @@ export class FastifyApp {
 
   private setupErrorHandler() {
     this.app.setErrorHandler((error, _, reply) => {
-      const errorMessage = this.formatError(error)
+      const formtatedError = this.formatError(error)
 
-      reply.status(errorMessage.status_code).send(errorMessage)
+      reply.status(formtatedError.status_code).send(formtatedError.error)
     })
   }
 
   private formatError(error: FastifyError): Error {
     const isSchemaError = !!error.validation
+
     if (isSchemaError) {
       const { instancePath, message } = error.validation![0]
       const path = instancePath.replace("/", "")
 
       return {
-        error_code: "INVALID_DATA",
         status_code: 400,
-        error_description: `${path}: ${message}`
+        error: {
+          error_code: "INVALID_DATA",
+          error_description: `${path}: ${message}`
+        }
       }
     }
 
@@ -62,15 +67,19 @@ export class FastifyApp {
       logger.error(String(error))
       return {
         status_code: 500,
-        error_code: "INTERNAL_SERVER_ERROR",
-        error_description: "Erro interno no servidor"
+        error: {
+          error_code: "INTERNAL_SERVER_ERROR",
+          error_description: "Erro interno no servidor"
+        },
       }
     }
 
     return {
       status_code: error.statusCode,
-      error_description: error.message,
-      error_code: error.code
+      error: {
+        error_description: error.message,
+        error_code: error.code
+      },
     }
   }
 
