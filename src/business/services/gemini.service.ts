@@ -15,32 +15,33 @@ export class GeminiService {
 
     this.ai = new GoogleGenAI({ apiKey: this.API_KEY })
   }
+/* 
+  async uploadImage(image_base64: string) {
+    const byteCharacters = Buffer.from(image_base64, "base64");
+    const byteArray = new Uint8Array(byteCharacters)
+    const blob = new Blob([byteArray], { type: "image/jpg"})
 
-  /* async uploadImage(image_base64: string) {
-    const file = await this.ai.files.upload({
-      file
+    this.ai.files.upload({
+      file: blob,
+      config: { mimeType: "image/jpg", }
     })
-    return file
   } */
 
   async extractMeasureFromImage(image: string) {
-    logger.debug("Image will be analyzed", [GeminiService.name, this.extractMeasureFromImage.name])
+    logger.info("Image will be analyzed", [GeminiService.name, this.extractMeasureFromImage.name])
     const contents: ContentListUnion = [{
       inlineData: {
         data: image,
-        mimeType: "image/jpg"
+        mimeType: "image/jpeg"
       }
     },
     { text: `${this.EXTRACT_MEASURE_PROMPT} (retornar somente o valor em inteiro)` }
     ]
 
-    console.log("aa")
     const response = await this.ai.models.generateContent({
       model: "gemini-2.0-flash",
       contents: contents,
     })
-
-    logger.debug(JSON.stringify(response))
 
     return response.text
   }
