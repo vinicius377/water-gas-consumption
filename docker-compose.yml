@@ -14,6 +14,7 @@ services:
     env_file: ".env"
     environment:
       - MONGO_DB=mongodb://water-gas-consumption-db:27017/consumption
+      - EXTRACT_MEASURE_PROMPT=a partir dessa imagem, retornar o valor que esta indicado
   db:
     container_name: water-gas-consumption-db
     ports:

@@ -2,10 +2,12 @@ import Fastify, { FastifyError, FastifyHttpOptions } from "fastify"
 import { validatorCompiler, serializerCompiler, ZodTypeProvider } from "fastify-type-provider-zod"
 import cors from "@fastify/cors"
 import { Error } from "./types/Error"
-import fastify_healthcheck from "fastify-healthcheck"
+import healthcheck_pl from "fastify-healthcheck"
 //@ts-ignore
-import fastify_routes from "fastify-list-routes"
+import list_routes_pl from "fastify-list-routes"
 import { logger } from "./utils/logger"
+import helmet_pl from "@fastify/helmet"
+import mongo_sanitize_pl from "@exortek/fastify-mongo-sanitize"
 
 export class FastifyApp {
   private app = Fastify({
@@ -26,9 +28,13 @@ export class FastifyApp {
   }
 
   private setupRegistersPlugins() {
-    this.app.register(fastify_healthcheck)
+    this.app.register(healthcheck_pl)
+
     // TODO: make this work
-    this.app.register(fastify_routes)
+    this.app.register(list_routes_pl)
+
+    this.app.register(mongo_sanitize_pl)
+    this.app.register(helmet_pl)
   }
 
   private setupErrorHandler() {
