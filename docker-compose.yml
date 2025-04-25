@@ -12,14 +12,15 @@ services:
     networks: 
       - water-gas-consumption
     env_file: ".env"
+    environment:
+      - MONGO_DB=mongodb://water-gas-consumption-db:27017/consumption
   db:
     container_name: water-gas-consumption-db
     ports:
      - "27017:27017"
     image: mongo
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: example
+    volumes:
+     - water-gas-consumption:/data/db
     networks: 
      - water-gas-consumption
 

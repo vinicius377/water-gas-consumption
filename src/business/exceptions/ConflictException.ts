@@ -1,5 +1,5 @@
 import { FastifyError } from "fastify";
-import { Error as ErrorType } from "../types/Error";
+import { Error as ErrorType } from "../../types/Error";
 
 export class ConflictException {
   constructor(error: Omit<ErrorType, "status_code">) {

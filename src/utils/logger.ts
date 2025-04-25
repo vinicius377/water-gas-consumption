@@ -20,6 +20,12 @@ class Logger {
     return this.pinoLogger.error(`${tracePath}${message}`)
   }
 
+  debug(message: string | Error, paths = [] as string[]) {
+    const tracePath = this.createTracePath(paths)
+    return this.pinoLogger.debug(`${tracePath}${message}`)
+
+  }
+
   private createTracePath(paths: string[]) {
     return paths.reduce((acc, path) => acc += `${path} >> `, "")
   }

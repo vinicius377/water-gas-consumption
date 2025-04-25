@@ -3,9 +3,11 @@ import { logger } from "./utils/logger"
 import { connectDB } from "./config/db";
 import { loadRoutes } from "./api/controllers";
 import { FastifyApp } from "./app";
+import { injectDependencies } from "./config/typedi";
 
 async function bootstrap() {
   await connectDB()
+  injectDependencies()
 
   const server = new FastifyApp().setupFastifyServer()
 
