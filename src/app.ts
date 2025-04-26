@@ -7,7 +7,6 @@ import healthcheck_pl from "fastify-healthcheck"
 import list_routes_pl from "fastify-list-routes"
 import { logger } from "./utils/logger"
 import helmet_pl from "@fastify/helmet"
-import mongo_sanitize_pl from "@exortek/fastify-mongo-sanitize"
 
 export type FastifyAppType = FastifyInstance<RawServerDefault, RawRequestDefaultExpression, RawReplyDefaultExpression, FastifyBaseLogger, ZodTypeProvider>
 
@@ -35,7 +34,6 @@ export class FastifyApp {
     // TODO: make this work
     this.app.register(list_routes_pl)
 
-    this.app.register(mongo_sanitize_pl)
     this.app.register(helmet_pl)
   }
 
@@ -51,14 +49,13 @@ export class FastifyApp {
     const isSchemaError = !!error.validation
 
     if (isSchemaError) {
-      const { instancePath, message } = error.validation![0]
-      const path = instancePath.replace("/", "")
+      const { message } = error.validation![0]
 
       return {
         status_code: 400,
         error: {
           error_code: "INVALID_DATA",
-          error_description: `${path}: ${message}`
+          error_description: message || ""
         }
       }
     }

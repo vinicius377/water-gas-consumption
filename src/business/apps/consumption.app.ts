@@ -14,7 +14,7 @@ export class ConsumptionApp {
   ) { }
 
   async upload(dto: UploadDto) {
-    const alreadyRegisteredThisMonth = await this.repository.findOnCurrentMonthByCustomerCode(dto.customer_code)
+    const alreadyRegisteredThisMonth = await this.repository.findOnCurrentMonthByMeasureType(dto.customer_code, dto.measure_type)
 
     if (alreadyRegisteredThisMonth) {
       throw new ConflictException({
