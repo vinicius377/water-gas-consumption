@@ -7,6 +7,7 @@ import healthcheck_pl from "fastify-healthcheck"
 import list_routes_pl from "fastify-list-routes"
 import { logger } from "./utils/logger"
 import helmet_pl from "@fastify/helmet"
+import { ConsumptionController } from "./api/controllers/consumption.controller"
 
 export type FastifyAppType = FastifyInstance<RawServerDefault, RawRequestDefaultExpression, RawReplyDefaultExpression, FastifyBaseLogger, ZodTypeProvider>
 
@@ -20,18 +21,18 @@ export class FastifyApp {
     this.app.setValidatorCompiler(validatorCompiler)
     this.app.setSerializerCompiler(serializerCompiler)
 
-    this.app.register(cors)
-
     this.setupErrorHandler()
     this.setupRegistersPlugins()
+    this.setupRoutes()
 
     return this.app
   }
 
   private setupRegistersPlugins() {
     this.app.register(healthcheck_pl)
+    this.app.register(cors)
 
-    // TODO: make this work
+    // FIX: make this work
     this.app.register(list_routes_pl)
 
     this.app.register(helmet_pl)
@@ -43,6 +44,10 @@ export class FastifyApp {
 
       reply.status(formtatedError.status_code).send(formtatedError.error)
     })
+  }
+
+  private setupRoutes() {
+    ConsumptionController(this.app)
   }
 
   private formatError(error: FastifyError): Error {

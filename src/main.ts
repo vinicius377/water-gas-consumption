@@ -1,7 +1,6 @@
 import "reflect-metadata"
 import { logger } from "./utils/logger"
 import { connectDB } from "./config/db";
-import { loadRoutes } from "./api/controllers";
 import { FastifyApp } from "./app";
 import { injectDependencies } from "./config/typedi";
 
@@ -10,8 +9,6 @@ async function bootstrap() {
   injectDependencies()
 
   const server = new FastifyApp().setupFastifyServer()
-
-  loadRoutes(server)
 
   server.listen({ port: 3000, host: "0.0.0.0" }, (err, address) => {
     if (err) {
