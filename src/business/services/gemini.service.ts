@@ -32,14 +32,13 @@ export class GeminiService {
   }
 
   async extractMeasureFromImage(image: string) {
-    logger.info("Image will be analyzed", [GeminiService.name, this.extractMeasureFromImage.name])
-    const mimeType = await getMimeTypeFromBase64(image)
-    console.log("aqui", mimeType)
+    const mimeType = getMimeTypeFromBase64(image)
+    logger.info(`Image will be analyzed in ${mimeType?.label}`, [GeminiService.name, this.extractMeasureFromImage.name])
 
     const contents: ContentListUnion = [
       {
         inlineData: {
-          mimeType: "image/jpg",
+          mimeType: mimeType?.mimeType, 
           data: image
         }
       },
