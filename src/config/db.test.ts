@@ -8,7 +8,6 @@ describe(connectDB.name, () => {
     expect(connectDB()).rejects.toThrowError()
   })
 
-  // TODO: make this
   it("should be sucess if MONGO_DB is gived", async () => {
     vi.stubEnv("MONGO_DB", "98012hbasdibaasdadaskdhjgb")
 

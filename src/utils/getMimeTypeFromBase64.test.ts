@@ -21,6 +21,12 @@ describe(getMimeTypeFromBase64.name, () => {
     expect(result?.mimeType).toBe("image/webp")
   })
 
+  it("should return null if its is invalid", () => {
+    const result = getMimeTypeFromBase64("aaa")
+
+    expect(result).toBeNull()
+  })
+
 /* 
  * FIX: not working
   it("should return image/heic if base64 is heic", () => {

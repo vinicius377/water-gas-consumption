@@ -1,6 +1,6 @@
 import { ConsumptionEntity } from "../../business/repositories/models/consumption.model"
 
-interface UploadViewModel {
+export interface UploadViewModel {
   image_url: string,
   measure_value: number,
   measure_uuid: string
