@@ -3,6 +3,7 @@ import { ConsumptionApp } from "../../business/apps/consumption.app";
 import { uploadSchema } from "../schemas/upload.schema";
 import { mapToUploadViewModel } from "../mappers/upload.mapper";
 import { FastifyAppType } from "../../app";
+import { confirmSchema } from "../schemas/confirm.schema";
 
 export function ConsumptionController(server: FastifyAppType) {
   const app = Container.get(ConsumptionApp)
@@ -21,7 +22,18 @@ export function ConsumptionController(server: FastifyAppType) {
       res.code(200).send(mapToUploadViewModel(result))
     })
 
-  server.get("/", () => {
+  server.patch(
+    "/confirm",
+    {
+      schema: {
+        body: confirmSchema
+      }
+    },
+    async (req, res) => {
+
+    res.code(200).send({
+      success: true
+    })
   })
 
 }

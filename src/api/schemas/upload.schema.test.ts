@@ -32,8 +32,6 @@ describe("uploadSchema", () => {
     expect(() => uploadSchema.parse(payload)).toThrowError()
   })
 
-
-
   it("should resolve if payload is valid", () => {
     expect(uploadSchema.parse(mockUploadPayload)).toBeTruthy()
   })
