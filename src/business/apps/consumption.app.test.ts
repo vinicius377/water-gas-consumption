@@ -1,0 +1,68 @@
+import { ConsumptionRepository } from "../repositories/consumption.repository"
+import { ConsumptionApp } from "./consumption.app"
+import { ConsumptionModel } from "../repositories/models/consumption.model"
+import { GeminiService } from "../services/gemini.service"
+import { mockUploadAppResponse, mockUploadPayload } from "../../_mocks_/upload-route"
+import { ConflictException } from "../exceptions/conflict.exception"
+import { BadRequestException } from "../exceptions/bad_request.exception"
+
+vi.mock("../repositories/consumption.repository")
+vi.mock("../services/gemini.service")
+
+describe(ConsumptionApp.name, () => {
+  let app!: ConsumptionApp
+
+  beforeEach(() => {
+    app = new ConsumptionApp(
+      new ConsumptionRepository(ConsumptionModel),
+      new GeminiService()
+    )
+  })
+
+  describe(ConsumptionApp.prototype.upload.name, () => {
+
+    it("should throw error if already has registered consumption in this month with type", async () => {
+      vi.mocked(
+        ConsumptionRepository.prototype.findOnCurrentMonthByMeasureType
+      ).mockReturnValueOnce(Promise.resolve(mockUploadAppResponse as any))
+
+      await expect(app.upload(mockUploadPayload)).rejects.toThrowError(
+        expect.objectContaining(new ConflictException({
+          code: "DOUBLE_REPORT", message: "Leitura do mês já realizada"
+        }))
+      )
+    })
+
+    it("should throw error if geminiService return a NaN", async () => {
+      const geminiMockedMessage = "Não foi possível extrair o valor da imagem"
+      vi.mocked(
+        GeminiService.prototype.extractMeasureFromImage
+      ).mockReturnValueOnce(Promise.resolve(geminiMockedMessage))
+
+      await expect(app.upload(mockUploadPayload)).rejects.toThrowError(
+        expect.objectContaining(new BadRequestException({
+          code: "INVALID_DATA", message: geminiMockedMessage
+        }))
+      )
+    })
+
+    it("should create a new consumption", async () => {
+      const geminiMockedMessage = "10"
+      vi.mocked(
+        GeminiService.prototype.extractMeasureFromImage
+      ).mockReturnValueOnce(Promise.resolve(geminiMockedMessage))
+
+      await app.upload(mockUploadPayload)
+      const measureValue = Number(geminiMockedMessage)
+
+      expect(ConsumptionRepository.prototype.create).toHaveBeenCalledWith({
+        measure_value: measureValue,
+        measure_type: mockUploadPayload.measure_type,
+        measure_datetime: mockUploadPayload.measure_datetime,
+        image_url: "iamgem",
+        customer_code: mockUploadPayload.customer_code
+      })
+    })
+
+  })
+})

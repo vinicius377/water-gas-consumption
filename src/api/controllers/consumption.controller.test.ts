@@ -6,7 +6,8 @@ import { mockUploadAppResponse, mockUploadPayload, mockUploadResponse } from "..
 import { mockConfirmPayload } from "../../_mocks_/confirm-route";
 
 const mockConsumptionApp = {
-  upload: () => (mockUploadAppResponse)
+  upload: () => (mockUploadAppResponse),
+  confirm: () => ({})
 }
 
 describe(ConsumptionController.name, () => {

@@ -16,9 +16,7 @@ export function ConsumptionController(server: FastifyAppType) {
       },
     },
     async (req, res) => {
-      const body = req.body
-
-      const result = await app.upload(body)
+      const result = await app.upload(req.body)
       res.code(200).send(mapToUploadViewModel(result))
     })
 
@@ -30,10 +28,11 @@ export function ConsumptionController(server: FastifyAppType) {
       }
     },
     async (req, res) => {
+      await app.confirm(req.body)
 
-    res.code(200).send({
-      success: true
+      res.code(200).send({
+        success: true
+      })
     })
-  })
 
 }

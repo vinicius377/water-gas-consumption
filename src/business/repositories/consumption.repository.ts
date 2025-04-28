@@ -2,18 +2,11 @@ import { Inject, Service } from "typedi";
 import { ConsumptionEntity, ConsumptionModel } from "./models/consumption.model"
 import { Model } from "mongoose";
 import { MeasureType } from "../../types/MeasureType";
-
-interface CreateConsumptionDto {
-  measure_datetime: string,
-  measure_type: string,
-  measure_value: number,
-  customer_code: string,
-  image_url: string
-}
+import { CreateConsumptionDto } from "./dtos/create-consumption.dto";
 
 @Service()
 export class ConsumptionRepository {
-  constructor(@Inject(ConsumptionModel.name) private model: Model<ConsumptionEntity>) { }
+  constructor(@Inject(ConsumptionModel.name) private readonly model: Model<ConsumptionEntity>) { }
 
   async create(dto: CreateConsumptionDto) {
     return this.model.create({
@@ -35,12 +28,12 @@ export class ConsumptionRepository {
     dateStart.setHours(23, 0)
 
     return this.model.findOne({
-        customer_code,
-        measure_type,
-         measure_datetime: {
-          $gte: dateStart.toISOString(),
-          $lte: dateEnd.toISOString()
-        } 
-      })
+      customer_code,
+      measure_type,
+      measure_datetime: {
+        $gte: dateStart.toISOString(),
+        $lte: dateEnd.toISOString()
+      }
+    })
   }
 }

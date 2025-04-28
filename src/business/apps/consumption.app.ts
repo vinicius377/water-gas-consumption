@@ -5,6 +5,7 @@ import { logger } from "../../utils/logger";
 import { GeminiService } from "../services/gemini.service";
 import { ConflictException } from "../exceptions/conflict.exception";
 import { BadRequestException } from "../exceptions/bad_request.exception";
+import { ConfirmDto } from "../../api/schemas/confirm.schema";
 
 @Service()
 export class ConsumptionApp {
@@ -40,6 +41,10 @@ export class ConsumptionApp {
 
     logger.info("Consumption registered on db", [ConsumptionApp.name, this.upload.name])
     return createdConsumption
+  }
+
+  async confirm(dto: ConfirmDto) {
+
   }
 
 }
