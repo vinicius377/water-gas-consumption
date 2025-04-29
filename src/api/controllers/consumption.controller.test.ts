@@ -64,4 +64,24 @@ describe(ConsumptionController.name, () => {
       })
     })
   })
+
+  it("/:costumer_id/list should send 200 code and data when successfull", () => {
+    app.inject({
+      method: "GET",
+      url: "/costumerCode/list",
+      query: { measure_type: "GAS" }
+    }, (_, response) => {
+      expect(response?.statusCode).toBe(200)
+    })
+  })
+
+  it("/:costumer_id/list should have optional query params", () => {
+    app.inject({
+      method: "GET",
+      url: "/costumerCode/list",
+    }, (_, response) => {
+      expect(response?.statusCode).toBe(200)
+    })
+  })
+
 })

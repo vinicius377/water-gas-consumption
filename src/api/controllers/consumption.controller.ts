@@ -4,6 +4,7 @@ import { uploadSchema } from "../schemas/upload.schema";
 import { mapToUploadViewModel } from "../mappers/upload.mapper";
 import { FastifyAppType } from "../../app";
 import { confirmSchema } from "../schemas/confirm.schema";
+import { listSchema } from "../schemas/list.schema";
 
 export function ConsumptionController(server: FastifyAppType) {
   const app = Container.get(ConsumptionApp)
@@ -34,5 +35,17 @@ export function ConsumptionController(server: FastifyAppType) {
         success: true
       })
     })
+
+  server.get(
+    "/:costumerCode/list",
+    {
+      schema: {
+        querystring: listSchema
+      }
+    },
+    async (req, res) => {
+      res.send(300)
+    }
+  )
 
 }

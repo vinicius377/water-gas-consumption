@@ -112,4 +112,5 @@ describe(ConsumptionApp.name, () => {
       )
     })
   })
+
 })
