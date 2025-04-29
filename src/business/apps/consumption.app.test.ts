@@ -5,6 +5,8 @@ import { GeminiService } from "../services/gemini.service"
 import { mockUploadAppResponse, mockUploadPayload } from "../../_mocks_/upload-route"
 import { ConflictException } from "../exceptions/conflict.exception"
 import { BadRequestException } from "../exceptions/bad_request.exception"
+import { mockConfirmPayload } from "../../_mocks_/confirm-route"
+import { NotFoundException } from "../exceptions/not_found.exception"
 
 vi.mock("../repositories/consumption.repository")
 vi.mock("../services/gemini.service")
@@ -64,5 +66,32 @@ describe(ConsumptionApp.name, () => {
       })
     })
 
+  })
+
+  describe(ConsumptionApp.prototype.confirm, () => {
+
+    it("should throw error if no has consumption reading", () => {
+      expect(app.confirm(mockConfirmPayload)).rejects.toThrowError(
+        expect.objectContaining(new NotFoundException({
+          message: "Leitura do mês já realizada", code: "MEASURE_NOT_FOUND"
+        })
+        )
+      )
+    })
+
+    it("should update consumption to confirmed", async () => {
+      vi.mocked(
+        ConsumptionRepository.prototype.findNotConfirmed
+      ).mockReturnValueOnce(Promise.resolve(mockUploadAppResponse as any))
+ 
+      await app.confirm(mockConfirmPayload)
+
+      expect(ConsumptionRepository.prototype.update).toHaveBeenCalledWith(
+        expect.objectContaining({
+          measure_value: mockConfirmPayload.confirmed_value,
+          has_confirmed: true
+        })
+      )
+    }) 
   })
 })

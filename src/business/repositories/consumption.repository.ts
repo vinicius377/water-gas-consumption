@@ -36,4 +36,12 @@ export class ConsumptionRepository {
       }
     })
   }
+
+  async findNotConfirmed() {
+
+  }
+
+  async update() {
+
+  }
 }
