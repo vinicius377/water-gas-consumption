@@ -6,6 +6,7 @@ import { GeminiService } from "../services/gemini.service";
 import { ConflictException } from "../exceptions/conflict.exception";
 import { BadRequestException } from "../exceptions/bad_request.exception";
 import { ConfirmDto } from "../../api/schemas/confirm.schema";
+import { NotFoundException } from "../exceptions/not_found.exception";
 
 @Service()
 export class ConsumptionApp {
@@ -31,7 +32,7 @@ export class ConsumptionApp {
       throw new BadRequestException({ code: "INVALID_DATA", message: response || "" })
     }
 
-    const createdConsumption = await this.repository.create({
+    const createdConsumptionMeasure = await this.repository.create({
       measure_value: measureValue,
       measure_type: dto.measure_type,
       measure_datetime: dto.measure_datetime,
@@ -39,12 +40,29 @@ export class ConsumptionApp {
       customer_code: dto.customer_code
     })
 
-    logger.info("Consumption registered on db", [ConsumptionApp.name, this.upload.name])
-    return createdConsumption
+    logger.info("Consumption measure registered on db", [ConsumptionApp.name, this.upload.name])
+    return createdConsumptionMeasure
   }
 
   async confirm(dto: ConfirmDto) {
+    const consumptionMeasure = await this.repository.findOne({ measure_uuid: dto.measure_uuid })
 
+    if (!consumptionMeasure) {
+      throw new NotFoundException({
+        message: "Leitura do mês já realizada", code: "MEASURE_NOT_FOUND"
+      })
+    }
+
+    if (consumptionMeasure.has_confirmed) {
+      throw new ConflictException({
+        message: "Leitura do mês já realizada", code: "CONFIRMATION_DUPLICATE"
+      })
+    }
+
+    await this.repository.updateOne(dto.measure_uuid, {
+      has_confirmed: true,
+      measure_value: dto.confirmed_value
+    })
   }
 
 }

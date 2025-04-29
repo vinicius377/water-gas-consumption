@@ -70,8 +70,8 @@ describe(ConsumptionApp.name, () => {
 
   describe(ConsumptionApp.prototype.confirm, () => {
 
-    it("should throw error if no has consumption reading", () => {
-      expect(app.confirm(mockConfirmPayload)).rejects.toThrowError(
+    it("should throw error if no has consumption reading", async () => {
+      await expect(app.confirm(mockConfirmPayload)).rejects.toThrowError(
         expect.objectContaining(new NotFoundException({
           message: "Leitura do mês já realizada", code: "MEASURE_NOT_FOUND"
         })
@@ -79,19 +79,37 @@ describe(ConsumptionApp.name, () => {
       )
     })
 
+    it("should throw error if measure was be confirmed", async () => {
+      vi.mocked(
+        ConsumptionRepository.prototype.findOne
+      ).mockReturnValueOnce(Promise.resolve({
+        ...mockUploadAppResponse,
+        has_confirmed: true
+      } as any))
+
+
+      await expect(app.confirm(mockConfirmPayload)).rejects.toThrowError(
+        expect.objectContaining(new ConflictException({
+          message: "Leitura do mês já realizada", code: "CONFIRMATION_DUPLICATE"
+        })
+        )
+      )
+    })
+
     it("should update consumption to confirmed", async () => {
       vi.mocked(
-        ConsumptionRepository.prototype.findNotConfirmed
+        ConsumptionRepository.prototype.findOne
       ).mockReturnValueOnce(Promise.resolve(mockUploadAppResponse as any))
- 
+
       await app.confirm(mockConfirmPayload)
 
-      expect(ConsumptionRepository.prototype.update).toHaveBeenCalledWith(
-        expect.objectContaining({
+      expect(ConsumptionRepository.prototype.updateOne).toHaveBeenCalledWith(
+        mockConfirmPayload.measure_uuid,
+        {
           measure_value: mockConfirmPayload.confirmed_value,
           has_confirmed: true
-        })
+        }
       )
-    }) 
+    })
   })
 })

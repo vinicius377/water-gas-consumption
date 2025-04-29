@@ -37,11 +37,13 @@ export class ConsumptionRepository {
     })
   }
 
-  async findNotConfirmed() {
-
+  async findOne(dto: Partial<ConsumptionEntity>) {
+    return this.model.findOne(dto).then(x => x?.toObject())
   }
 
-  async update() {
-
+  async updateOne(id: string, dto: Partial<ConsumptionEntity>) {
+    return this.model.updateOne({
+      measure_uuid: id
+    }, dto)
   }
 }
