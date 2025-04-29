@@ -1,8 +1,9 @@
 import { Inject, Service } from "typedi";
 import { ConsumptionEntity, ConsumptionModel } from "./models/consumption.model"
-import { Model } from "mongoose";
+import { FilterQuery, Model } from "mongoose";
 import { MeasureType } from "../../types/MeasureType";
 import { CreateConsumptionDto } from "./dtos/create-consumption.dto";
+import { ListByCustomerCode } from "./dtos/list-by-customer_code.dto";
 
 @Service()
 export class ConsumptionRepository {
@@ -45,5 +46,33 @@ export class ConsumptionRepository {
     return this.model.updateOne({
       measure_uuid: id
     }, dto)
+  }
+
+  async groupByCustomerCode(customer_code: string, measure_type?: MeasureType): Promise<ListByCustomerCode | null> {
+    const match: FilterQuery<ConsumptionEntity> = {
+      customer_code
+    }
+
+    if (measure_type) {
+      match.measure_type = measure_type
+    }
+
+    const result = await this.model.aggregate([
+      {
+        $match: match
+      },
+      {
+        $group: {
+          _id: "$customer_code",
+          measures: { $push: "$$ROOT" }
+        }
+      },
+      {
+        $limit: 1
+      }
+    ])
+
+
+    return result[0] || null
   }
 }

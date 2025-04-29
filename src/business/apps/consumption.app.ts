@@ -7,6 +7,7 @@ import { ConflictException } from "../exceptions/conflict.exception";
 import { BadRequestException } from "../exceptions/bad_request.exception";
 import { ConfirmDto } from "../../api/schemas/confirm.schema";
 import { NotFoundException } from "../exceptions/not_found.exception";
+import { MeasureType } from "../../types/MeasureType";
 
 @Service()
 export class ConsumptionApp {
@@ -63,6 +64,20 @@ export class ConsumptionApp {
       has_confirmed: true,
       measure_value: dto.confirmed_value
     })
+  }
+
+  async list(customer_code: string, measure_type?: MeasureType) {
+    const list = await this.repository.groupByCustomerCode(customer_code, measure_type)
+
+    if (!list) {
+      throw new NotFoundException({
+        code: "MEASURES_NOT_FOUND",
+        message: "Nenhuma leitura encontrada"
+      })
+    }
+    console.log(list)
+
+    return list
   }
 
 }

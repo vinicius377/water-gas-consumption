@@ -22,7 +22,6 @@ describe(ConsumptionApp.name, () => {
   })
 
   describe(ConsumptionApp.prototype.upload.name, () => {
-
     it("should throw error if already has registered consumption in this month with type", async () => {
       vi.mocked(
         ConsumptionRepository.prototype.findOnCurrentMonthByMeasureType
@@ -69,7 +68,6 @@ describe(ConsumptionApp.name, () => {
   })
 
   describe(ConsumptionApp.prototype.confirm, () => {
-
     it("should throw error if no has consumption reading", async () => {
       await expect(app.confirm(mockConfirmPayload)).rejects.toThrowError(
         expect.objectContaining(new NotFoundException({
@@ -109,6 +107,21 @@ describe(ConsumptionApp.name, () => {
           measure_value: mockConfirmPayload.confirmed_value,
           has_confirmed: true
         }
+      )
+    })
+  })
+
+  describe(ConsumptionApp.prototype.list, () => {
+    it("should throw error if not found measures", async () => {
+      vi.mocked(
+        ConsumptionRepository.prototype.groupByCustomerCode
+      ).mockReturnValueOnce(Promise.resolve(null))
+
+      await expect(app.list("teste")).rejects.toThrowError(
+        expect.objectContaining(new NotFoundException({
+          code: "MEASURES_NOT_FOUND",
+          message: "Nenhuma leitura encontrada"
+        }))
       )
     })
   })
