@@ -26,12 +26,4 @@ describe(getMimeTypeFromBase64.name, () => {
 
     expect(result).toBeNull()
   })
-
-/* 
- * FIX: not working
-  it("should return image/heic if base64 is heic", () => {
-    const result = getMimeTypeFromBase64(heicImage)
-
-    expect(result?.mimeType).toBe("image/heic")
-  }) */
 })

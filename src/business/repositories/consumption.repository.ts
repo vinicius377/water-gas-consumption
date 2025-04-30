@@ -25,6 +25,7 @@ export class ConsumptionRepository {
     dateStart.setHours(0, 0)
 
     const dateEnd = new Date()
+    // last day of the month
     dateEnd.setMonth(dateStart.getMonth() + 1, 0)
     dateStart.setHours(23, 0)
 

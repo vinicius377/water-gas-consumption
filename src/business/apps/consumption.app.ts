@@ -75,7 +75,6 @@ export class ConsumptionApp {
         message: "Nenhuma leitura encontrada"
       })
     }
-    console.log(list)
 
     return list
   }

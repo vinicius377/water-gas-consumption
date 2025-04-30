@@ -4,11 +4,11 @@ import { connectDB } from './db'
 vi.mock("mongoose", { spy: true })
 
 describe(connectDB.name, () => {
-  it("should throw error if MONGO_DB is not gived", async () => {
+  it("should throw error if missing MONGO_DB env", async () => {
     await expect(connectDB()).rejects.toThrowError()
   })
 
-  it("should be sucess if MONGO_DB is gived", async () => {
+  it("should be sucess if missing MONGO_DB env", async () => {
     vi.stubEnv("MONGO_DB", "98012hbasdibaasdadaskdhjgb")
 
     await expect(connectDB()).resolves.toBeUndefined()

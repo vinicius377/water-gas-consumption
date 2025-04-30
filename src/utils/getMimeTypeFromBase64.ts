@@ -33,8 +33,6 @@ const signatureTypes: SignatureType[] = [
 
 export function getMimeTypeFromBase64(base64: string) {
   const imageInHex = Buffer.from(base64, "base64").toString("hex")
-  // INFO:remove this before
-  //writeFile("./test", imageInHex, null, () => {})
 
   for (const signatureType of signatureTypes) {
     if (
