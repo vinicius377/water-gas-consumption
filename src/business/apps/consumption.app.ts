@@ -8,12 +8,14 @@ import { BadRequestException } from "../exceptions/bad_request.exception";
 import { ConfirmDto } from "../../api/schemas/confirm.schema";
 import { NotFoundException } from "../exceptions/not_found.exception";
 import { MeasureType } from "../../types/MeasureType";
+import { MinIoService } from "../services/minio.service";
 
 @Service()
 export class ConsumptionApp {
   constructor(
     private readonly repository: ConsumptionRepository,
-    private readonly geminiService: GeminiService
+    private readonly geminiService: GeminiService,
+    private readonly minIoService: MinIoService
   ) { }
 
   async upload(dto: UploadDto) {
@@ -33,11 +35,13 @@ export class ConsumptionApp {
       throw new BadRequestException({ code: "INVALID_DATA", message: response || "" })
     }
 
+    const imageUrl = await this.minIoService.uploadImage(dto.image)
+
     const createdConsumptionMeasure = await this.repository.create({
       measure_value: measureValue,
       measure_type: dto.measure_type,
       measure_datetime: dto.measure_datetime,
-      image_url: "iamgem",
+      image_url: imageUrl,
       customer_code: dto.customer_code
     })
 

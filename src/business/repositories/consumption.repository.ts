@@ -21,21 +21,22 @@ export class ConsumptionRepository {
 
   async findOnCurrentMonthByMeasureType(customer_code: string, measure_type: MeasureType) {
     const dateStart = new Date()
+    dateStart.setDate(20)
     dateStart.setDate(1)
     dateStart.setHours(0, 0)
 
     const dateEnd = new Date()
     // last day of the month
     dateEnd.setMonth(dateStart.getMonth() + 1, 0)
-    dateStart.setHours(23, 0)
+    dateEnd.setHours(0, 0)
 
     return this.model.findOne({
       customer_code,
       measure_type,
-      measure_datetime: {
+      createdAt: {
         $gte: dateStart.toISOString(),
         $lte: dateEnd.toISOString()
-      }
+      } 
     })
   }
 

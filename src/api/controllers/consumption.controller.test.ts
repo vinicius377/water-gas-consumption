@@ -4,10 +4,12 @@ import { FastifyApp } from "../../app";
 import Container from "typedi";
 import { mockUploadAppResponse, mockUploadPayload, mockUploadResponse } from "../../_mocks_/upload-route";
 import { mockConfirmPayload } from "../../_mocks_/confirm-route";
+import { mockList } from "../../_mocks_/list";
 
 const mockConsumptionApp = {
   upload: () => (mockUploadAppResponse),
-  confirm: () => ({})
+  confirm: () => ({}),
+  list: () => (mockList)
 }
 
 describe(ConsumptionController.name, () => {

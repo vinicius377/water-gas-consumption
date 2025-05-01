@@ -1,4 +1,4 @@
-iport { GeminiService } from "./gemini.service"
+import { GeminiService } from "./gemini.service"
 
 describe(GeminiService.name, () => {
   it("should throw error if missing GEMINI_API_KEY env", () => {

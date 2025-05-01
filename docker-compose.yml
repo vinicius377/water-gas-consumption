@@ -15,6 +15,7 @@ services:
     environment:
       - MONGO_DB=mongodb://water-gas-consumption-db:27017/consumption
       - EXTRACT_MEASURE_PROMPT=a partir dessa imagem, retornar o valor que esta indicado
+      - MINIO_ROOT_PASSWORD=minioadmin   
   db:
     container_name: water-gas-consumption-db
     ports:
@@ -24,9 +25,25 @@ services:
      - water-gas-consumption:/data/db
     networks: 
      - water-gas-consumption
+  minio:
+    image: minio/minio:latest
+    container_name: minio
+    ports:
+      - "9000:9000"  
+      - "9001:9001"  
+    environment:
+      - MINIO_ROOT_USER=minioadmin       
+      - MINIO_ROOT_PASSWORD=minioadmin   
+      #- MINIO_SERVER_URL=http://localhost:9000
+    volumes:
+      - minio-data:/data
+    command: server /data --console-address ":9001"
+    networks: 
+     - water-gas-consumption
 
 volumes:
  water-gas-consumption:
+ minio-data:
 
 networks:
  water-gas-consumption:

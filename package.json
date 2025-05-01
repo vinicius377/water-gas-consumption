@@ -17,6 +17,7 @@
     "fastify-healthcheck": "^5.1.0",
     "fastify-list-routes": "^2.0.0",
     "fastify-type-provider-zod": "^4.0.2",
+    "minio": "^8.0.5",
     "mongoose": "^8.13.2",
     "pino": "^9.6.0",
     "reflect-metadata": "^0.2.2",

@@ -7,9 +7,15 @@ import { ConflictException } from "../exceptions/conflict.exception"
 import { BadRequestException } from "../exceptions/bad_request.exception"
 import { mockConfirmPayload } from "../../_mocks_/confirm-route"
 import { NotFoundException } from "../exceptions/not_found.exception"
+import { MinIoService } from "../services/minio.service"
 
 vi.mock("../repositories/consumption.repository")
 vi.mock("../services/gemini.service")
+vi.mock("../services/minio.service", () => ({
+  MinIoService: vi.fn().mockImplementation(() => ({
+    uploadImage: vi.fn().mockResolvedValue("imagem")
+  }))
+}))
 
 describe(ConsumptionApp.name, () => {
   let app!: ConsumptionApp
@@ -17,7 +23,8 @@ describe(ConsumptionApp.name, () => {
   beforeEach(() => {
     app = new ConsumptionApp(
       new ConsumptionRepository(ConsumptionModel),
-      new GeminiService()
+      new GeminiService(),
+      new MinIoService()
     )
   })
 
@@ -60,7 +67,7 @@ describe(ConsumptionApp.name, () => {
         measure_value: measureValue,
         measure_type: mockUploadPayload.measure_type,
         measure_datetime: mockUploadPayload.measure_datetime,
-        image_url: "iamgem",
+        image_url: "imagem",
         customer_code: mockUploadPayload.customer_code
       })
     })

@@ -1,37 +1,35 @@
-import { logger } from "./logger"
-import { writeFile } from "node:fs"
 
 interface SignatureType {
   signature: RegExp,
   mimeType: string,
-  label: string
+  extension: string
 }
 
 // Magic numbers (https://en.wikipedia.org/wiki/Magic_number_(programming))
 const signatureTypes: SignatureType[] = [
    {
     signature: /89504E470D0A1A0A/i,
-    label: "PNG",
+    extension: "png",
     mimeType: "image/png"
   },
     {
     signature: /^FFD8FFE[01E]/i,
-    label: "JPG",
+    extension: "jpg",
     mimeType: "image/jpg"
   },
   {
     signature: /52494646.{8}57454250/i,
-    label: "WEBP",
+    extension: "webp",
     mimeType: "image/webp"
   },
   {
     signature: /6674797068656963667479706d/i,
-    label: "HEIC",
+    extension: "heic",
     mimeType: "image/heic"
   }, 
 ]
 
-export function getMimeTypeFromBase64(base64: string) {
+export function getMetaDataFromBase64(base64: string) {
   const imageInHex = Buffer.from(base64, "base64").toString("hex")
 
   for (const signatureType of signatureTypes) {

@@ -49,12 +49,13 @@ export function ConsumptionController(server: FastifyAppType) {
       req: FastifyRequest<{ Params: { costumerCode: string }, Querystring: ListDto }>,
       res
     ) => {
+      console.log(req.params, req.query)
       const costumerCode = req.params.costumerCode
       const measureType = req.query.measure_type
 
       const list = await app.list(costumerCode, measureType)
 
-      res.code(300).send(mapToListMeasures(list))
+      res.code(200).send(mapToListMeasures(list))
     }
   )
 

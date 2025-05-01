@@ -1,7 +1,7 @@
 import {  GoogleGenAI, ContentListUnion } from "@google/genai";
 import { Service } from "typedi";
 import { logger } from "../../utils/logger";
-import { getMimeTypeFromBase64 } from "../../utils/getMimeTypeFromBase64";
+import { getMetaDataFromBase64 } from "../../utils/getMetaDataFromBase64";
 
 @Service()
 export class GeminiService {
@@ -17,24 +17,9 @@ export class GeminiService {
     this.ai = new GoogleGenAI({ apiKey: this.API_KEY })
   }
 
-  x() {
-    return this.ai
-  }
-
-  async uploadImage(image_base64: string) {
-    const byteCharacters = Buffer.from(image_base64, "base64");
-    const byteArray = new Uint8Array(byteCharacters)
-    const blob = new Blob([byteArray], { type: "image/jpg" })
-
-    return this.ai.files.upload({
-      file: blob,
-      config: { mimeType: "image/jpg", }
-    })
-  }
-
   async extractMeasureFromImage(image: string) {
-    const mimeType = getMimeTypeFromBase64(image)
-    logger.info(`Image will be analyzed in ${mimeType?.label}`, [GeminiService.name, this.extractMeasureFromImage.name])
+    const mimeType = getMetaDataFromBase64(image)
+    logger.info(`Image will be analyzed in ${mimeType?.extension}`, [GeminiService.name, this.extractMeasureFromImage.name])
 
     const contents: ContentListUnion = [
       {

@@ -1,6 +1,6 @@
 import { z } from "zod"
 import { MeasureType } from "../../types/MeasureType"
-import { getMimeTypeFromBase64 } from "../../utils/getMimeTypeFromBase64"
+import { getMetaDataFromBase64 } from "../../utils/getMetaDataFromBase64"
 
 export const uploadSchema = z.object({
   image: z.preprocess(
@@ -12,7 +12,7 @@ export const uploadSchema = z.object({
     },
     z.string({ required_error: "Imagem obrigatória" })
       .base64("Deve ser uma imagem em base64")
-      .refine(x => !!getMimeTypeFromBase64(x), "Só são permitidos imagems em JPG, PNG, WEBP ou HEIC")
+      .refine(x => !!getMetaDataFromBase64(x), "Só são permitidos imagems em JPG, PNG, WEBP ou HEIC")
     ,
   ),
   customer_code: z.string({ required_error: "Código do cliente obrigatório " }),
