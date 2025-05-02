@@ -7,7 +7,7 @@ A partir dessa foto, uma IA(Gemini) irá analisar a foto e retornar o valor que 
 
 ```bash
 # Clonar o repositório
-git clone https://github.com/vinicius377/water-gas-consumption.git && cd water-gas-consumption.git
+git clone https://github.com/vinicius377/water-gas-consumption.git && cd water-gas-consumption
 
 # Colocar sua chave de api do gemini nas variáveis de ambiente
 echo "GEMINI_API_KEY=<YOUR_API_KEY>" >> .env
