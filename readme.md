@@ -41,19 +41,19 @@ Os testes foram escritos com vitest e podem ser executados com o script `npm run
   Criar um novo registro de consumo
 
   ```json
-  // Payload
   {
+      "_comment" : "Payload"
       "image": "base64",
       "customer_code": "string",
       "measure_datetime": "datetime",
       "measure_type": "WATER ou GAS"
   }
-  
-  // Resposta de sucesso
+ 
   {
-      “image_url”: "string",
-      “measure_value”:"integer",
-      “measure_uuid”: "string"
+      "_comment": "Resposta de sucesso",
+      "image_url": "string",
+      "measure_value":"integer",
+      "measure_uuid": "string"
   }
   ```
 
@@ -62,32 +62,32 @@ Os testes foram escritos com vitest e podem ser executados com o script `npm run
   Confirmar o valor
 
   ```json
-  // Payload
   {
+      "_comment": "Payload"
       "measure_uuid": "string",
       "confirmed_value": "integer"
   }
   
-  // Resposta de sucesso
   {
-      “success”: true
+      "_comment": "Resposta de sucesso",
+      "success": true
   }
   ```
 
 - **GET /<customer code>/list (params: measure_type=WATER)**
 
   ```json
-  // Resposta de sucesso
   {
-  	“customer_code”: string,
-      “measures”: [
+      "_comment": "Resposta de sucesso",
+      "customer_code": "string",
+      "measures": [
           {
-          “measure_uuid”: string,
-          “measure_datetime”: datetime,
-          “measure_type”: string,
-          “has_confirmed”:boolean,
-          “image_url”: string
-          },
+            "measure_uuid": "string",
+            "measure_datetime": "datetime",
+            "measure_type": "string",
+            "has_confirmed": "boolean",
+            "image_url": "string"
+          }
       ]
   }
   ```
