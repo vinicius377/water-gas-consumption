@@ -1,4 +1,4 @@
-import Container from "typedi";
+import { Container } from "typedi";
 import { ConsumptionApp } from "../../business/apps/consumption.app";
 import { uploadSchema } from "../schemas/upload.schema";
 import { mapToUploadViewModel } from "../mappers/upload.mapper";
@@ -49,7 +49,6 @@ export function ConsumptionController(server: FastifyAppType) {
       req: FastifyRequest<{ Params: { costumerCode: string }, Querystring: ListDto }>,
       res
     ) => {
-      console.log(req.params, req.query)
       const costumerCode = req.params.costumerCode
       const measureType = req.query.measure_type
 

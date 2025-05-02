@@ -11,7 +11,7 @@ export class GeminiService {
 
   constructor() {
     if (!this.API_KEY) {
-      throw new Error("Missing GEMINI_API_KEY enviroment")
+      throw new Error("Missing GEMINI_API_KEY env")
     }
 
     this.ai = new GoogleGenAI({ apiKey: this.API_KEY })

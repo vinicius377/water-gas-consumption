@@ -3,8 +3,6 @@ import { validatorCompiler, serializerCompiler, ZodTypeProvider } from "fastify-
 import cors from "@fastify/cors"
 import { Error } from "./types/Error"
 import healthcheck_pl from "fastify-healthcheck"
-//@ts-ignore
-import list_routes_pl from "fastify-list-routes"
 import { logger } from "./utils/logger"
 import helmet_pl from "@fastify/helmet"
 import { ConsumptionController } from "./api/controllers/consumption.controller"
@@ -31,9 +29,6 @@ export class FastifyApp {
   private setupRegistersPlugins() {
     this.app.register(healthcheck_pl)
     this.app.register(cors)
-
-    // FIX: make this work
-    this.app.register(list_routes_pl)
 
     this.app.register(helmet_pl)
   }

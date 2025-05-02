@@ -5,7 +5,7 @@ export async function connectDB() {
   const MONGO_DB = process.env.MONGO_DB
 
   if (!MONGO_DB) {
-    throw new Error("Missing MONGO_DB enviroment")
+    throw new Error("Missing MONGO_DB env")
   }
 
   try {

@@ -1,14 +1,16 @@
+name: water-gas-consumption
+
 services:
   api:
     image: water-gas-consumption
     container_name: water-gas-consumption
     build:
       context: .
-      dockerfile: docker/development/Dockerfile
+      dockerfile: docker/prod/Dockerfile
     ports:
      - "80:3000"
     volumes:
-      - .:/app
+      - .:/app/dev
     networks: 
       - water-gas-consumption
     env_file: ".env"
@@ -16,13 +18,14 @@ services:
       - MONGO_DB=mongodb://water-gas-consumption-db:27017/consumption
       - EXTRACT_MEASURE_PROMPT=a partir dessa imagem, retornar o valor que esta indicado
       - MINIO_ROOT_PASSWORD=minioadmin   
+      - TZ=America/Sao_Paulo
   db:
     container_name: water-gas-consumption-db
     ports:
      - "27017:27017"
     image: mongo
     volumes:
-     - water-gas-consumption:/data/db
+     - mongo-db:/data/db
     networks: 
      - water-gas-consumption
   minio:
@@ -34,16 +37,15 @@ services:
     environment:
       - MINIO_ROOT_USER=minioadmin       
       - MINIO_ROOT_PASSWORD=minioadmin   
-      #- MINIO_SERVER_URL=http://localhost:9000
     volumes:
-      - minio-data:/data
+      - minio:/data
     command: server /data --console-address ":9001"
     networks: 
      - water-gas-consumption
 
 volumes:
- water-gas-consumption:
- minio-data:
+ mongo-db:
+ minio:
 
 networks:
  water-gas-consumption:

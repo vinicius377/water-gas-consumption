@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "scripts": {
     "dev": "ts-node-dev --respawn --transpile-only src/main.ts",
-    "test": "vitest --watch --silent=false"
+    "test": "vitest --watch --silent=false",
+    "start": "node ./dist/main.js",
+    "build": "vite build"
   },
   "keywords": [],
   "author": "",
@@ -15,7 +17,6 @@
     "@google/genai": "^0.10.0",
     "fastify": "^5.3.2",
     "fastify-healthcheck": "^5.1.0",
-    "fastify-list-routes": "^2.0.0",
     "fastify-type-provider-zod": "^4.0.2",
     "minio": "^8.0.5",
     "mongoose": "^8.13.2",
@@ -25,9 +26,14 @@
     "zod": "^3.24.3"
   },
   "devDependencies": {
+    "@swc/core": "^1.11.24",
     "pino-pretty": "^13.0.0",
+    "terser": "^5.39.0",
     "ts-node-dev": "^2.0.0",
+    "tsx": "^4.19.4",
     "typescript": "^5.8.3",
+    "vite": "^6.3.4",
+    "vite-plugin-node": "^5.0.1",
     "vitest": "^3.1.2"
   }
 }

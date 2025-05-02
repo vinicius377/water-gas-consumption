@@ -1,4 +1,4 @@
-import Container from "typedi";
+import { Container } from "typedi";
 import { ConsumptionModel } from "../business/repositories/models/consumption.model";
 
 export function injectDependencies() {
